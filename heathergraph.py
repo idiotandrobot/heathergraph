@@ -35,17 +35,22 @@ def process_mail():
     finally:
         mailbox.logout()
 
-def print_message(date, subject, content):
+def print_message(sender, date, subject, content):
 
     txt = ''
     txt += '-' * 32
-    txt += '\r\n'
+    txt += '\r\n' * 2
+    try:
+        txt += 'From: %s' % sender.split()[0]
+        txt += '\r\n'
+    except:
+        pass 
     txt += 'Date: %s' % date
     txt += '\r\n'
     txt += 'Subject: %s' % subject
     txt += '\r\n'
     txt += '* ' * 16   
-    txt += '\r\n'    
+    txt += '\r\n'
     if len(content) == 0: 
         txt += '++ No Potatoes Error ++'
     else:

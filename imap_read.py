@@ -39,6 +39,12 @@ def read_date(message):
     except:
         return '++ No Date ++'
 
+def read_from(message):
+    try:
+        return str(email.header.make_header(email.header.decode_header(message['From'])))
+    except:
+        return ''
+
 def read_message(mailbox, num, message_handler = None):
     response, data = mailbox.fetch(num, '(RFC822)')
     if response != 'OK':
@@ -55,6 +61,7 @@ def read_message(mailbox, num, message_handler = None):
 
     if message_handler != None:
         message_handler(\
+        read_from(message), \
         read_date(message), \
         read_subject(message), \
         read_content(message))
