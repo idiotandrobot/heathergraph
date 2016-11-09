@@ -38,13 +38,18 @@ def process_mail():
 def print_message(date, subject, content):
 
     txt = '* ' * 40
-    txt += 'Date:', date
+    txt += '\r\n'
+    txt += 'Date: %s' % date
+    txt += '\r\n'
     txt += 'Subject: %s' % subject
-    txt += '-' * 80    
+    txt += '\r\n'
+    txt += '-' * 80
+    txt += '\r\n'    
     if len(content) == 0: 
         txt += '++ No Potatoes Error ++'
     else:
         txt += content
+    txt += '\r\n'
     txt += '* ' * 40
 
     print txt
@@ -60,19 +65,6 @@ def monitor_mail():
         process_mail)
     finally:
         mailbox.logout()    
-
-def connect_to_printer():
-    printer = PipstaPrinter()
-
-    while True:
-        try:
-            printer.connect()
-            printer.set_nfc_settings(0x23)
-            return printer
-        except IOError as unused:
-            pass
-        finally:
-            pass
 
 def main():
     if platform.system() != 'Linux':
