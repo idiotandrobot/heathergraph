@@ -10,6 +10,7 @@ import imap_connect
 import imap_read
 import imap_idle
 from throttle import throttle
+import pipsta
 
 #imaplib.Debug = 4
 
@@ -30,9 +31,24 @@ def process_mail():
 
     mailbox = imap_connect.open_connection(config, verbose=True)
     try:
-        imap_read.read_folder(mailbox, config.get('email', 'folder'))
+        imap_read.read_folder(mailbox, config.get('email', 'folder'), print_message)
     finally:
         mailbox.logout()
+
+def print_message(date, subject, content):
+
+    txt = '* ' * 40
+    txt += 'Date:', date
+    txt += 'Subject: %s' % subject
+    txt += '-' * 80    
+    if len(content) == 0: 
+        txt += '++ No Potatoes Error ++'
+    else:
+        txt += content
+    txt += '* ' * 40
+
+    print txt
+    pipsta.print_to_pipsta(txt) 
 
 def monitor_mail():
     config = ConfigParser.ConfigParser()
@@ -44,6 +60,19 @@ def monitor_mail():
         process_mail)
     finally:
         mailbox.logout()    
+
+def connect_to_printer():
+    printer = PipstaPrinter()
+
+    while True:
+        try:
+            printer.connect()
+            printer.set_nfc_settings(0x23)
+            return printer
+        except IOError as unused:
+            pass
+        finally:
+            pass
 
 def main():
     if platform.system() != 'Linux':
