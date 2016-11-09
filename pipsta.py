@@ -88,7 +88,8 @@ def print_to_pipsta(txt):
 
     # Print a char at a time and check the printers buffer isn't full
     for x in txt:
-        usb_endpoint.write(x)    # write all the data to the USB OUT endpoint
+        if ord(x) < 128: # only output ascii
+            usb_endpoint.write(x)    # write all the data to the USB OUT endpoint
         
         res = dev.ctrl_transfer(0xC0, 0x0E, 0x020E, 0, 2)
         while res[0] == USB_BUSY:
