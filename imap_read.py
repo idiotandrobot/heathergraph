@@ -18,7 +18,7 @@ def read_content(content):
             text += read_content(payload)
         return text
     elif content.get_content_type() == 'text/plain':
-        return content.get_payload(decode=True)
+        return unicode(content.get_payload(decode=True), 'utf-8')
 
     return ''
 
@@ -78,4 +78,8 @@ def read_current_folder(mailbox, message_handler = None):
         return
 
     for num in data[0].split():
-        read_message(mailbox, num, message_handler)
+        try:
+            read_message(mailbox, num, message_handler)
+        except:
+            print '++ Error: Unable to read message', num
+
