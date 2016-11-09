@@ -37,20 +37,19 @@ def process_mail():
 
 def print_message(date, subject, content):
 
-    txt = '* ' * 40
+    txt = ''
+    txt += '-' * 32
     txt += '\r\n'
     txt += 'Date: %s' % date
     txt += '\r\n'
     txt += 'Subject: %s' % subject
     txt += '\r\n'
-    txt += '-' * 80
+    txt += '* ' * 16   
     txt += '\r\n'    
     if len(content) == 0: 
         txt += '++ No Potatoes Error ++'
     else:
         txt += content
-    txt += '\r\n'
-    txt += '* ' * 40
 
     print txt
     pipsta.print_to_pipsta(txt) 
