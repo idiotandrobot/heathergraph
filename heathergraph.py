@@ -61,7 +61,7 @@ def print_message(sender, date, subject, content):
 
 def monitor_mail():
     config = ConfigParser.ConfigParser()
-    config.read([os.path.abspath('settings.ini')])
+    config.read([os.path.abspath('heathergraph.ini')])
 
     mailbox = imap_connect.open_connection(config, verbose=True)
     try:
