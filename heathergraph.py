@@ -27,7 +27,7 @@ def signal_handler(sig_int, frame):
 @throttle(seconds=5)
 def process_mail():
     config = ConfigParser.ConfigParser()
-    config.read([os.path.abspath('settings.ini')])
+    config.read([os.path.abspath('heathergraph.ini')])
 
     mailbox = imap_connect.open_connection(config, verbose=True)
     try:
