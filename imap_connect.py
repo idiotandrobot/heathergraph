@@ -13,15 +13,3 @@ def open_connection(config, verbose=False):
     if verbose: print '++ Logging in as', username
     connection.login(username, password)
     return connection
-
-if __name__ == '__main__':
-    # Read the config file
-    config = ConfigParser.ConfigParser()
-    config.read([os.path.abspath('settings.ini')])
-
-    c = open_connection(config, verbose=True)
-    try:
-        print c
-    finally:
-        c.logout()
-        print "++ logged out"
