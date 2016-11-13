@@ -9,8 +9,10 @@ SERVICENAME = 'Heathergraph'
 def parse_args():
     parser = argparse.ArgumentParser()
     parser.add_argument('operation',
-                        choices=['start', 'stop', 'restart'],
-                        help='start/stop/restart the server')
+                        choices=['status','start', 'stop', 'restart'],
+                        help='query/start/stop/restart the server',
+                        default='status',
+                        nargs='?')
     return parser.parse_args()
 
 
@@ -40,23 +42,22 @@ def start_service(launch_command):
 def stop_service(pid):
     if pid:
         print 'Stopping %s service - PID={}'.format(pid) % SERVICENAME
-        os.kill(pid, signal.SIGTERM)            
-    else:
-        print 'No %s service was found to be running' % SERVICENAME
-    
+        os.kill(pid, signal.SIGTERM)                
 
 def main():
-    args = parse_args()
     launch_command = ['python',
                       get_absolute_filename(FILENAME)]
     pid = find_server_process(launch_command)
+    if pid:
+        print SERVICENAME, 'service is running - PID={}'.format(pid)
+    else:
+        print 'No %s service was found to be running' % SERVICENAME
+    
+    args = parse_args()
 
     if args.operation == 'start':
         if not pid:
             start_service(launch_command)
-        else:
-            print SERVICENAME, 'service is already running'
-
     elif args.operation == 'stop':
         stop_service(pid)
     elif args.operation == 'restart':
