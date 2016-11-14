@@ -1,6 +1,8 @@
 import imaplib
 import time
 import imap_read
+import logging
+log = logging.getLogger(__name__)
 
 def is_bye(response):
     return response.startswith('* BYE ') or (len(response) == 0)
@@ -29,23 +31,29 @@ def monitor_folder(mailbox, foldername, mail_handler = None):
     try:
         mailbox.select(foldername, readonly=True)
         send_idle(mailbox)
-        print '++ Waiting...'      
+        #print '++ Waiting...'   
+        log.debug('Waiting...')   
         while True:        
             line = mailbox.readline().strip()
-            print '++>', line
+            #print '++>', line
+            log.debug('> %s', line)
             if is_bye(line):
-                print '++ Time to go'
+                #print '++ Time to go'
+                log.debug('Time to go')
                 break
             splitline = line.split()
             if is_new_mail(line):
-                print "++ You've got mail"
+                #print "++ You've got mail"
+                log.debug("You've got mail")
                 if mail_handler != None: mail_handler()                
             if is_flagged_unread(line):
-                print "++ Mail flagged unread"
+                #print "++ Mail flagged unread"
+                log.debug('Mail flagged unread')
                 if mail_handler != None: mail_handler()              
     finally:
         try:
-            print '++ Closing...'
+            #print '++ Closing...'
+            log.debug('Closing...')
             c.close()
         except:
             pass

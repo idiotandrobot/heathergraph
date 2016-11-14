@@ -11,6 +11,8 @@ import imap_read
 import imap_idle
 from throttle import throttle
 import pipsta
+import logging
+log = logging.getLogger(__name__)
 
 #imaplib.Debug = 4
 
@@ -40,7 +42,7 @@ def get_config():
 def process_mail():
     config = get_config()
 
-    mailbox = imap_connect.open_connection(config, verbose=True)
+    mailbox = imap_connect.open_connection(config)
     try:
         imap_read.read_folder(mailbox, config.get('email', 'folder'), print_message)
     finally:
@@ -67,35 +69,71 @@ def print_message(sender, date, subject, content):
     else:
         txt += content
 
-    print txt
+    #print txt
+    log.debug(txt)
     pipsta.print_to_pipsta(txt) 
 
 def monitor_mail():
     config = get_config()
 
-    mailbox = imap_connect.open_connection(config, verbose=True)
+    mailbox = imap_connect.open_connection(config)
     try:
         imap_idle.monitor_folder(mailbox, config.get('email', 'folder'), \
         process_mail)
     finally:
         mailbox.logout()    
+        
+def start_up_print():
+    pipsta.print_to_pipsta('+ ' * 16 + '\r\n' + ' ' * 13 + 'Hello\r\n' + '+ ' * 16)
+
+def linux_check():
+    if platform.system() != 'Linux':
+        sys.exit('This script has only been written for Linux')
 
 def main():
-    if platform.system() != 'Linux':
-        print 'This script has only been written for Linux'
-        #sys.exit('This script has only been written for Linux')
+    linux_check()    
     
     parse_arguments()
         
     signal.signal(signal.SIGINT, signal_handler)    
 
-    #pipsta.print_to_pipsta('+ ' * 16 + '\r\n' + ' ' * 13 + 'Hello\r\n' + '+ ' * 16)    
-
-    process_mail()
+    #time.sleep(10)
+    
+    try:
+        start_up_print()
+    except:
+        log.exception('start_up_print')            
+    
+    try:
+        process_mail()
+    except:
+        log.exception('process_mail')
 
     while True:
         time.sleep(MONITOR_POLL_PERIOD)
-        monitor_mail()
+        try:
+            monitor_mail()
+        except:
+            log.exception('monitor_mail')
 
 if __name__ == '__main__':
+    
+    root = logging.getLogger()
+    root.setLevel(logging.DEBUG)
+    defaultFormatter = logging.Formatter('%(asctime)s -- %(message)s')
+    
+    fileHandler = logging.FileHandler(os.path.abspath(
+        os.path.join(
+            os.path.join(
+                os.path.dirname(__file__),'logs'),
+                'heathergraph.log')))
+    fileHandler.setLevel(logging.DEBUG)
+    fileHandler.setFormatter(defaultFormatter)
+    root.addHandler(fileHandler)       
+       
+    stdoutHandler = logging.StreamHandler(sys.stdout)
+    stdoutHandler.setLevel(logging.DEBUG)
+    stdoutHandler.setFormatter(defaultFormatter)
+    root.addHandler(stdoutHandler)
+    
     main()
