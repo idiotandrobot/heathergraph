@@ -2,6 +2,7 @@ import imaplib
 import email
 import email.header
 import datetime
+import re
 import logging
 log = logging.getLogger(__name__)
 
@@ -21,7 +22,7 @@ def read_content(content):
             text += read_content(payload)
         return text
     elif content.get_content_type() == 'text/plain':
-        return unicode(content.get_payload(decode=True), 'utf-8')
+        return re.sub('[^\s!-~]', ' ', unicode(content.get_payload(decode=True), 'utf-8'))
 
     return ''
 
