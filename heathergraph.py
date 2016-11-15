@@ -14,7 +14,7 @@ import imap_connect
 import imap_read
 import imap_idle
 from throttle import throttle
-if platform.system() == 'Linux':
+if linux_check():
     import pipsta
 import logging
 log = logging.getLogger(__name__)
