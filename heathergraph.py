@@ -1,16 +1,21 @@
-import argparse
 import platform
+def linux_check():
+    return platform.system() == 'Linux'
+
+import argparse
 import signal
 import sys
 import time
 import ConfigParser
 import os
+
 import imaplib
 import imap_connect
 import imap_read
 import imap_idle
 from throttle import throttle
-import pipsta
+if platform.system() == 'Linux':
+    import pipsta
 import logging
 log = logging.getLogger(__name__)
 
@@ -71,7 +76,8 @@ def print_message(sender, date, subject, content):
 
     #print txt
     log.debug(txt)
-    pipsta.print_to_pipsta(txt) 
+    if linux_check():
+        pipsta.print_to_pipsta(txt) 
 
 def monitor_mail():
     config = get_config()
@@ -84,15 +90,13 @@ def monitor_mail():
         mailbox.logout()    
         
 def start_up_print():
-    pipsta.print_to_pipsta('+ ' * 16 + '\r\n' + ' ' * 13 + 'Hello\r\n' + '+ ' * 16)
+    txt = '+ ' * 16 + '\r\n' + ' ' * 13 + 'Hello\r\n' + '+ ' * 16
+    log.debug(txt)
+    if linux_check():
+        pipsta.print_to_pipsta(txt)
 
-def linux_check():
-    if platform.system() != 'Linux':
-        sys.exit('This script has only been written for Linux')
 
 def main():
-    linux_check()    
-    
     parse_arguments()
         
     signal.signal(signal.SIGINT, signal_handler)    
