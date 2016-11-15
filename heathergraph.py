@@ -6,8 +6,11 @@ import argparse
 import signal
 import sys
 import time
-import ConfigParser
 import os
+
+import config
+config = config.Config(os.path.abspath(os.path.join(os.path.dirname(__file__),
+                                        'heathergraph.ini')))
 
 import imaplib
 import imap_connect
@@ -31,25 +34,11 @@ def signal_handler(sig_int, frame):
     del sig_int, frame
     sys.exit()
 
-_config = None
-
-def get_config():
-    global _config
-    if _config is not None: 
-        return _config
-    
-    _config = ConfigParser.ConfigParser()
-    _config.read(os.path.abspath(os.path.join(os.path.dirname(__file__),
-                                        'heathergraph.ini')))
-    return _config
-
 @throttle(seconds=5)
 def process_mail():
-    config = get_config()
-
     mailbox = imap_connect.open_connection(config)
     try:
-        imap_read.read_folder(mailbox, config.get('email', 'folder'), print_message)
+        imap_read.read_folder(mailbox, config.folder, print_message)
     finally:
         mailbox.logout()
 
@@ -80,12 +69,9 @@ def print_message(sender, date, subject, content):
         pipsta.print_to_pipsta(txt) 
 
 def monitor_mail():
-    config = get_config()
-
     mailbox = imap_connect.open_connection(config)
     try:
-        imap_idle.monitor_folder(mailbox, config.get('email', 'folder'), \
-        process_mail)
+        imap_idle.monitor_folder(mailbox, config.folder, process_mail)
     finally:
         mailbox.logout()    
         
