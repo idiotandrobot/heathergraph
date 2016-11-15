@@ -1,0 +1,6 @@
+--------------------------------
+From: {from}
+Date: {date}
+Subject: {subject}
+* * * * * * * * * * * * * * * * 
+{content}

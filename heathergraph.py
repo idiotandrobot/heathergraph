@@ -46,6 +46,27 @@ def process_mail():
 
 def print_message(sender, date, subject, content):
 
+    try:
+        sender = sender.split()[0]
+    except:
+        pass
+
+    if len(content) == 0:
+        content = '++ No Potatoes Error ++'
+
+    message = {
+        'from': sender,
+        'date': date,
+        'subject': subject,
+        'content': content
+    }
+
+    with open(dir.subdir('templates').filepath(config.template), 'r') as f:
+        template = f.read()
+    
+    txt = template.format(**message)
+
+    '''
     txt = ''
     txt += '-' * 32
     txt += '\r\n' * 2
@@ -64,6 +85,7 @@ def print_message(sender, date, subject, content):
         txt += '++ No Potatoes Error ++'
     else:
         txt += content
+    '''
 
     #print txt
     log.debug(txt)
@@ -78,7 +100,8 @@ def monitor_mail():
         mailbox.logout()    
         
 def start_up_print():
-    txt = '+ ' * 16 + '\r\n' + ' ' * 13 + 'Hello\r\n' + '+ ' * 16
+    with open(dir.subdir('templates').filepath('startup.txt'), 'r') as f:
+        txt = f.read()
     log.debug(txt)
     if linux_check():
         pipsta.print_to_pipsta(txt)
