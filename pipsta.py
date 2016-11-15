@@ -85,11 +85,16 @@ def print_to_pipsta(txt):
     # close is called in all situation (including unhandled exceptions).
     
     usb_endpoint.write(b'\x1b!\x00')
+    
+    txt = txt.replace('<tall>', b'\x1b!\x10')
+    txt = txt.replace('<wide>', b'\x1b!\x20')
+    txt = txt.replace('<u>', b'\x1b!\x80')   
+    txt = txt.replace('<reg>',b'\x1b!\x00')
 
     # Print a char at a time and check the printers buffer isn't full
     for x in txt:
-        if ord(x) < 128: # only output ascii
-            usb_endpoint.write(x)    # write all the data to the USB OUT endpoint
+        #if ord(x) < 128: # only output ascii
+        usb_endpoint.write(x)    # write all the data to the USB OUT endpoint
         
         res = dev.ctrl_transfer(0xC0, 0x0E, 0x020E, 0, 2)
         while res[0] == USB_BUSY:
