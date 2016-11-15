@@ -8,9 +8,11 @@ import sys
 import time
 import os
 
+import dir
+dir = dir.Dir.root()
+
 import config
-config = config.Config(os.path.abspath(os.path.join(os.path.dirname(__file__),
-                                        'heathergraph.ini')))
+config = config.Config(dir.filepath('heathergraph.ini'))
 
 import imaplib
 import imap_connect
@@ -112,11 +114,7 @@ if __name__ == '__main__':
     root.setLevel(logging.DEBUG)
     defaultFormatter = logging.Formatter('%(asctime)s -- %(message)s')
     
-    fileHandler = logging.FileHandler(os.path.abspath(
-        os.path.join(
-            os.path.join(
-                os.path.dirname(__file__),'logs'),
-                'heathergraph.log')))
+    fileHandler = logging.FileHandler(dir.subdir('logs').filepath('heathergraph.log'))
     fileHandler.setLevel(logging.DEBUG)
     fileHandler.setFormatter(defaultFormatter)
     root.addHandler(fileHandler)       
