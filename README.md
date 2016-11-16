@@ -10,15 +10,16 @@ Create `heathergraph.ini` file in `heathergraph` folder containing:
 
 ```
 [email]
-hostname: {imap server, eg imap.gmail.com} 
+*hostname: {imap server, default: imap.gmail.com}* 
 username: {email address}
 password: {email account password}
-folder: {email folder to watch}
+*folder: {email folder to watch, default: Inbox}*
+*template: {message template to print, default: email.txt}*
 ```
 
 ## Startup
 
 - Run the script directly from the terminal: `python heathergraph.py`
 - Run the server script to create a background process: `python server.py start`
-- Run the server on startup by adding `sudo python {heathergraph path}/server.py start` to `/etc/rc.local`
+- Run the server on startup by adding `python {heathergraph path}/server.py start` to `/etc/rc.local`
 
