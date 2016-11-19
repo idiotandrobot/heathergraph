@@ -11,6 +11,7 @@ class Config(object):
         self.password = self.get_value('email', 'password')
         self.folder = self.get_value('email', 'folder', 'Inbox')
         self.template = self.get_value('email', 'template', 'email.txt')
+        self.logfig = self.get_value('logging', 'config', 'logging.ini')
 
     @staticmethod
     def get_config(path):
@@ -21,6 +22,8 @@ class Config(object):
     def get_value(self, section, key, default = None):
         try:
             return self.config.get(section, key)
+        except ConfigParser.NoSectionError:
+            return default
         except ConfigParser.NoOptionError:
             return default
 
@@ -31,3 +34,4 @@ if __name__ == '__main__':
     print 'Password: {}'.format(config.password)
     print 'Folder: {}'.format(config.folder)
     print 'Template: {}'.format(config.template)
+    print 'Logfig: {}'.format(config.logfig)

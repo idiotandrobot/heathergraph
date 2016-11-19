@@ -22,6 +22,7 @@ from throttle import throttle
 if linux_check():
     import pipsta
 import logging
+import logging.config
 log = logging.getLogger(__name__)
 
 #imaplib.Debug = 4
@@ -86,9 +87,8 @@ def print_message(sender, date, subject, content):
     else:
         txt += content
     '''
-
     #print txt
-    log.debug(txt)
+    log.info('Message:\r\n' + txt)
     if linux_check():
         pipsta.print_to_pipsta(txt) 
 
@@ -101,8 +101,8 @@ def monitor_mail():
         
 def start_up_print():
     with open(dir.subdir('templates').filepath('startup.txt'), 'r') as f:
-        txt = f.read()
-    log.debug(txt)
+        txt = f.read()        
+    log.info('Greeting:\r\n' + txt)
     if linux_check():
         pipsta.print_to_pipsta(txt)
 
@@ -112,6 +112,7 @@ def main():
         
     signal.signal(signal.SIGINT, signal_handler)    
 
+    # Needed at startup if 'wait for network' isn't configured 
     #time.sleep(10)
     
     try:
@@ -131,9 +132,15 @@ def main():
         except:
             log.exception('monitor_mail')
 
-if __name__ == '__main__':
-    
-    root = logging.getLogger()
+if __name__ == '__main__':   
+    try:
+        logging.config.fileConfig(dir.filepath(config.logfig), disable_existing_loggers=False)
+    except:        
+        logging.basicConfig(level=logging.DEBUG)
+        log.exception('Config Error')
+        
+    main()
+    '''root = logging.getLogger()
     root.setLevel(logging.DEBUG)
     defaultFormatter = logging.Formatter('%(asctime)s -- %(message)s')
     
@@ -145,6 +152,5 @@ if __name__ == '__main__':
     stdoutHandler = logging.StreamHandler(sys.stdout)
     stdoutHandler.setLevel(logging.DEBUG)
     stdoutHandler.setFormatter(defaultFormatter)
-    root.addHandler(stdoutHandler)
+    root.addHandler(stdoutHandler)'''
     
-    main()
