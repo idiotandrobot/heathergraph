@@ -67,27 +67,6 @@ def print_message(sender, date, subject, content):
     
     txt = template.format(**message)
 
-    '''
-    txt = ''
-    txt += '-' * 32
-    txt += '\r\n' * 2
-    try:
-        txt += 'From: %s' % sender.split()[0]
-        txt += '\r\n'
-    except:
-        pass 
-    txt += 'Date: %s' % date
-    txt += '\r\n'
-    txt += 'Subject: %s' % subject
-    txt += '\r\n'
-    txt += '* ' * 16   
-    txt += '\r\n'
-    if len(content) == 0: 
-        txt += '++ No Potatoes Error ++'
-    else:
-        txt += content
-    '''
-    #print txt
     log.info('Message:\r\n' + txt)
     if linux_check():
         pipsta.print_to_pipsta(txt) 
@@ -140,17 +119,3 @@ if __name__ == '__main__':
         log.exception('Config Error')
         
     main()
-    '''root = logging.getLogger()
-    root.setLevel(logging.DEBUG)
-    defaultFormatter = logging.Formatter('%(asctime)s -- %(message)s')
-    
-    fileHandler = logging.FileHandler(dir.subdir('logs').filepath('heathergraph.log'))
-    fileHandler.setLevel(logging.DEBUG)
-    fileHandler.setFormatter(defaultFormatter)
-    root.addHandler(fileHandler)       
-       
-    stdoutHandler = logging.StreamHandler(sys.stdout)
-    stdoutHandler.setLevel(logging.DEBUG)
-    stdoutHandler.setFormatter(defaultFormatter)
-    root.addHandler(stdoutHandler)'''
-    

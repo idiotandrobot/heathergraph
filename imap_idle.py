@@ -31,29 +31,23 @@ def monitor_folder(mailbox, foldername, mail_handler = None):
     try:
         mailbox.select(foldername, readonly=True)
         send_idle(mailbox)
-        #print '++ Waiting...'   
-        log.debug('Waiting...')   
+        log.info('Waiting...')   
         while True:        
             line = mailbox.readline().strip()
-            #print '++>', line
             log.debug('> %s', line)
             if is_bye(line):
-                #print '++ Time to go'
-                log.debug('Time to go')
+                log.info('Time to go')
                 break
             splitline = line.split()
             if is_new_mail(line):
-                #print "++ You've got mail"
-                log.debug("You've got mail")
+                log.info("You've got mail")
                 if mail_handler != None: mail_handler()                
             if is_flagged_unread(line):
-                #print "++ Mail flagged unread"
-                log.debug('Mail flagged unread')
+                log.info('Mail flagged unread')
                 if mail_handler != None: mail_handler()              
     finally:
         try:
-            #print '++ Closing...'
-            log.debug('Closing...')
+            log.info('Closing...')
             c.close()
         except:
             pass

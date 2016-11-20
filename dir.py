@@ -1,27 +1,33 @@
 import os
+import logging
+log = logging.getLogger(__name__)
 
 class Dir(object):
 
     def __init__(self, dirname):
         self.dirname = dirname
-
-    def path(self):
-        return os.path.abspath(self.dirname)
+        self.path = os.path.abspath(dirname)
 
     def filepath(self, filename):
-        return(os.path.join(self.path(), filename))
+        value = os.path.join(self.path, filename)
+        log.debug('filepath: {}'.format(value))
+        return value
 
     def subdir(self, dirname):
-        return Dir(self.filepath(dirname))
+        value = os.path.join(self.path, dirname)
+        log.debug('subdir: {}'.format(value))
+        return Dir(value)
 
     @staticmethod
     def root():
-        return Dir(os.path.dirname(__file__))
+        value = os.path.dirname(__file__)
+        log.debug('root: {}'.format(value))
+        return Dir(value)
 
 
 if __name__ == '__main__':
+    logging.basicConfig(level=logging.DEBUG)
     root = Dir.root()
-    print root.path()
-    print root.filepath('settings.ini')
-    print root.subdir('subdir').path()
-    print root.subdir('subdir').filepath('file.txt')
+    root.filepath('settings.ini')
+    subdir = root.subdir('subdir')
+    subdir.filepath('file.txt')

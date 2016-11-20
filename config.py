@@ -1,17 +1,26 @@
 import ConfigParser
+import getpass
+import logging
+log = logging.getLogger(__name__)
 
 class Config(object):
 
     def __init__(self, path):
         
         self.config = self.get_config(path)
-
+        log.debug('Config: {}'.format(path))
         self.hostname = self.get_value('email', 'hostname', 'imap.gmail.com')
+        log.debug('Hostname: {}'.format(self.hostname))    
         self.username = self.get_value('email', 'username')
+        log.debug('Username: {}'.format(self.username))            
         self.password = self.get_value('email', 'password')
+        log.debug('Password: ********')
         self.folder = self.get_value('email', 'folder', 'Inbox')
+        log.debug('Folder: {}'.format(self.folder))
         self.template = self.get_value('email', 'template', 'email.txt')
+        log.debug('Template: {}'.format(self.template))    
         self.logfig = self.get_value('logging', 'config', 'logging.ini')
+        log.debug('Logfig: {}'.format(self.logfig))
 
     @staticmethod
     def get_config(path):
@@ -28,10 +37,6 @@ class Config(object):
             return default
 
 if __name__ == '__main__':
+    logging.basicConfig(level=logging.DEBUG)
     config = Config('heathergraph.ini')
-    print 'Hostname: {}'.format(config.hostname)
-    print 'Username: {}'.format(config.username)
-    print 'Password: {}'.format(config.password)
-    print 'Folder: {}'.format(config.folder)
-    print 'Template: {}'.format(config.template)
-    print 'Logfig: {}'.format(config.logfig)
+    
