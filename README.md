@@ -1,6 +1,6 @@
 # Heathergraph
 
-Python based text email printer for [Raspberry Pi](https://www.raspberrypi.org/) and [Pipsta](http://www.pipsta.co.uk/)
+Python based text email print server for [Raspberry Pi](https://www.raspberrypi.org/) and [Pipsta](http://www.pipsta.co.uk/)
 
 ## Configuration
 
