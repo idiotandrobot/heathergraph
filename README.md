@@ -29,6 +29,8 @@ Emails are printed based on text templates containing field placeholders and for
 
 The default [email.txt](https://github.com/idiotandrobot/heathergraph/blob/master/templates/email.txt) template can be modified or new templates added and configured in `heathergraph.ini`.
 
+The default [startup.txt](https://github.com/idiotandrobot/heathergraph/blob/master/templates/startup.txt) greeting template can also be customised.
+
 The Pipsta prints 32 or 16 chars per line, depending on font, so templates should be formatted accordingly.
 
 No wordwrapping is applied to any of the fields.
