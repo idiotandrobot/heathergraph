@@ -95,7 +95,8 @@ def main():
     #time.sleep(10)
     
     try:
-        start_up_print()
+        if config.greetingonstartup:
+            start_up_print()
     except:
         log.exception('start_up_print')            
     
