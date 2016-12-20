@@ -14,6 +14,9 @@ Create `heathergraph.ini` file in `heathergraph` folder containing:
 username: {email address}
 password: {email account password}
 *folder: {email folder to watch, default: Inbox}*
+
+[print]
+*greetingonstartup: {print /formatting/startup.txt on startup, default: yes}*
 *template: {message template to print, default: email.txt}*
 ```
 
