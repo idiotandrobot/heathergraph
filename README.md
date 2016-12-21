@@ -26,6 +26,7 @@ password: {email account password}
 - Run the server script to create a background process: `python server.py start`
 - Run the server on startup by adding `python {heathergraph path}/server.py start` to `/etc/rc.local`
 
+
 ## Templates
 
 Emails are printed based on text templates containing field placeholders and formatting tags.
