@@ -20,7 +20,6 @@ password: {email account password}
 *template: {message template to print, default: email.txt}*
 ```
 
-
 ## Startup
 
 - Run the script directly from the terminal: `python heathergraph.py`
