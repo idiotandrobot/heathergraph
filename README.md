@@ -55,7 +55,7 @@ Four fields are available for inclusion:-
 - **from** - first name of sender
 - **date** - message date formatted to `%a, %d %b %Y %H:%M:%S`
 - **subject** - full subject of email
-- **content** - text/plain content of email limited to printable ascii chars
+- **content** - text/plain or text/html content of email limited to printable ascii chars
 
 ```
 --------------------------------
