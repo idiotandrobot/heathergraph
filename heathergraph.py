@@ -52,25 +52,22 @@ def print_message(sender, date, subject, content):
     except:
         pass
 
-    if len(content) == 0:
-        content = '++ No Potatoes Error ++'
-
     message = {
         'from': sender,
         'date': date,
-        'subject': subject,
-        'content': content
+        'subject': subject.encode('utf-8', 'replace'),
+        'content': content.encode('utf-8', 'replace')
     }
 
     with open(dir.subdir('templates').filepath(config.template), 'r') as f:
         template = f.read()
     
     txt = template.format(**message)
-
+    
     log.info('Message:\r\n' + txt)
     if linux_check():
         pipsta.print_to_pipsta(txt) 
-
+   
 def monitor_mail():
     mailbox = imap_connect.open_connection(config)
     try:

@@ -3,6 +3,7 @@ import email
 import email.header
 import datetime
 import re
+import html_parse
 import logging
 log = logging.getLogger(__name__)
 
@@ -14,23 +15,50 @@ def navigate_content(content, level=0):
         for payload in content.get_payload():
             navigate_content(payload, level + 1)   
 
-def read_content(content):
-    if content.is_multipart():
-        text = ''
-        for payload in content.get_payload():
-            text += read_content(payload)
+def read_content(content):    
+    try:
+        text = '++ No Content ++'
+        if content.is_multipart():
+            for part in content.walk():
+                has_text, rtext = read_text(part)
+                if has_text:
+                    text = rtext
+                    break
+        else:
+            has_text, rtext = read_text(content)
+            if has_text:
+                text = rtext
         return text
-    elif content.get_content_type() == 'text/plain':
-        return re.sub('[^\s!-~]', ' ', unicode(content.get_payload(decode=True), 'utf-8'))
+    except:
+        log.exception('read_content')
+        return '++ No Potatoes Error ++'
 
-    return ''
+def read_text(content):
+    has_text = False
+    text = ''
+    ptype = content.get_content_type().split("/")    
+    if ptype[0] == 'text':
+        bytes = content.get_payload(decode=True)
+        charset = content.get_content_charset('iso-8859-1')
+        text = bytes.decode(charset, 'replace')
+        has_text = True
+        if ptype[1] == 'html':
+            has_text = False
+            text = html_parse.parse(text)
+            has_text = True
+    return has_text, text
 
 def read_subject(message):
     try:
-        decode = email.header.decode_header(message['Subject'])[0]
-        return unicode(decode[0])
+        subject = email.header.decode_header(message['Subject'])[0]
+        if subject[1] == None:
+            actual_subject = unicode(subject[0])
+        else:
+            actual_subject = subject[0].decode(subject[1])
+        return actual_subject
     except:
-        return '++ No Subject ++'
+        log.exception('read_subject')
+        return '++ Subject Error ++'
 
 def read_date(message):
     try:
@@ -40,7 +68,7 @@ def read_date(message):
                 email.utils.mktime_tz(date_tuple))
             return local_date.strftime('%a, %d %b %Y %H:%M:%S')
     except:
-        return '++ No Date ++'
+        return '++ Date Error ++'
 
 def read_from(message):
     try:
