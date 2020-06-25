@@ -18,14 +18,23 @@ password: {email account password}
 [print]
 *greetingonstartup: {print /formatting/startup.txt on startup, default: yes}*
 *template: {message template to print, default: email.txt}*
+
+[encoding]
+*errors: {character encoding error behaviour, options: strict/replace/ignore default: replace}
 ```
+
+### Configuration References
+Encoding Errors: [Python 2.x’s Unicode Support](https://docs.python.org/2.7/howto/unicode.html#the-unicode-type)
+
+## Dependencies
+
+- [beautifulsoup4](https://pypi.org/project/beautifulsoup4/): pip2 install beautifulsoup4
 
 ## Startup
 
 - Run the script directly from the terminal: `python heathergraph.py`
 - Run the server script to create a background process: `python server.py start`
 - Run the server on startup by adding `python {heathergraph path}/server.py start` to `/etc/rc.local`
-
 
 ## Templates
 
