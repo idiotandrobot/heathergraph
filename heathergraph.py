@@ -55,18 +55,21 @@ def print_message(sender, date, subject, content):
     message = {
         'from': sender,
         'date': date,
-        'subject': subject.encode('utf-8', 'replace'),
-        'content': content.encode('utf-8', 'replace')
+        'subject': subject.encode('utf-8', config.encodingerrors),
+        'content': content.encode('utf-8', config.encodingerrors)
     }
 
     with open(dir.subdir('templates').filepath(config.template), 'r') as f:
         template = f.read()
     
-    txt = template.format(**message)
+    txt = template.format(**message).decode('utf-8')
+    log.debug('Message:\r\n' + txt)
+
+    asc = txt.encode('ascii', config.encodingerrors)
+    log.info('ASCII:\r\n' + asc)
     
-    log.info('Message:\r\n' + txt)
     if linux_check():
-        pipsta.print_to_pipsta(txt) 
+        pipsta.print_to_pipsta(asc) 
    
 def monitor_mail():
     mailbox = imap_connect.open_connection(config)

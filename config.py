@@ -23,6 +23,7 @@ class Config(object):
         log.debug('Template: {}'.format(self.template))    
         self.logfig = self.get_value('logging', 'config', 'logging.ini')
         log.debug('Logfig: {}'.format(self.logfig))
+        self.encodingerrors = self.get_value('encoding', 'errors', 'replace')
 
     @staticmethod
     def get_config(path):
