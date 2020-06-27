@@ -17,10 +17,11 @@ password: {email account password}
 
 [print]
 *greetingonstartup: {print /formatting/startup.txt on startup, default: yes}*
+*startuptemplate: {startup template to print, default: startup.txt}*
 *template: {message template to print, default: email.txt}*
 
 [encoding]
-*errors: {character encoding error behaviour, options: strict/replace/ignore default: replace}
+*errors: {character encoding error behaviour, options: strict/replace/ignore default: replace}*
 ```
 
 ### Configuration References
