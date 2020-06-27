@@ -9,6 +9,7 @@ class Config(object):
         
         self.config = self.get_config(path)
         log.debug('Config: {}'.format(path))
+        # email
         self.hostname = self.get_value('email', 'hostname', 'imap.gmail.com')
         log.debug('Hostname: {}'.format(self.hostname))    
         self.username = self.get_value('email', 'username')
@@ -17,13 +18,19 @@ class Config(object):
         log.debug('Password: ********')
         self.folder = self.get_value('email', 'folder', 'Inbox')
         log.debug('Folder: {}'.format(self.folder))
+        # print
         self.greetingonstartup = bool(self.get_boolvalue('print', 'greetingonstartup', True))
         log.debug('Greeting on Startup: {}'.format(self.greetingonstartup))    
+        self.startuptemplate = self.get_value('print', 'startuptemplate', 'startup.txt')
+        log.debug('Startup Template: {}'.format(self.startuptemplate))
         self.template = self.get_value('print', 'template', 'email.txt')
         log.debug('Template: {}'.format(self.template))    
+        # logging
         self.logfig = self.get_value('logging', 'config', 'logging.ini')
         log.debug('Logfig: {}'.format(self.logfig))
+        # encoding
         self.encodingerrors = self.get_value('encoding', 'errors', 'replace')
+        log.debug('Encoding Errors: {}'.format(self.encodingerrors))
 
     @staticmethod
     def get_config(path):

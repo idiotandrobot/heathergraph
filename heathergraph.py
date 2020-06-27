@@ -79,7 +79,7 @@ def monitor_mail():
         mailbox.logout()    
         
 def start_up_print():
-    with open(dir.subdir('templates').filepath('startup.txt'), 'r') as f:
+    with open(dir.subdir('templates').filepath(config.startuptemplate), 'r') as f:
         txt = f.read()        
     log.info('Greeting:\r\n' + txt)
     if linux_check():
