@@ -14,6 +14,17 @@ dir = dir.Dir.root()
 import config
 config = config.Config(dir.filepath('heathergraph.ini'))
 
+import logging
+import logging.config
+log = logging.getLogger(__name__)
+try:
+    logging.config.fileConfig(dir.filepath(config.logfig), disable_existing_loggers=False)
+except:        
+    logging.basicConfig(level=logging.DEBUG)
+    log.exception('Config Error')
+
+config.log_values()
+
 import imaplib
 import imap_connect
 import imap_read
@@ -21,9 +32,6 @@ import imap_idle
 from throttle import throttle
 if linux_check():
     import pipsta
-import logging
-import logging.config
-log = logging.getLogger(__name__)
 
 #imaplib.Debug = 4
 
@@ -87,6 +95,7 @@ def start_up_print():
 
 
 def main():
+    log.info('Starting')
     parse_arguments()
         
     signal.signal(signal.SIGINT, signal_handler)    
@@ -113,10 +122,5 @@ def main():
             log.exception('monitor_mail')
 
 if __name__ == '__main__':   
-    try:
-        logging.config.fileConfig(dir.filepath(config.logfig), disable_existing_loggers=False)
-    except:        
-        logging.basicConfig(level=logging.DEBUG)
-        log.exception('Config Error')
         
     main()
