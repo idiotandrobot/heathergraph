@@ -28,12 +28,15 @@ def read_content(content):
             has_text, rtext = read_text(content)
             if has_text:
                 text = rtext
-        return text
+        return re.sub('[^\s!-~]', ' ', text.strip())
+    except ImportWarning as err:
+        log.warning(err.message)
+        return '++ No HTML Parser Installed ++'
     except:
         log.exception('read_content')
         return '++ No Potatoes Error ++'
 
-def read_text(content):
+def read_text(content, prefer_plain_text = True):
     has_text = False
     text = ''
     ptype = content.get_content_type().split("/")    
@@ -41,11 +44,17 @@ def read_text(content):
         bytes = content.get_payload(decode=True)
         charset = content.get_content_charset('iso-8859-1')
         text = bytes.decode(charset, 'replace')
-        has_text = True
-        if ptype[1] == 'html':
+        if ptype[1] == 'plain':            
+            has_text = True & prefer_plain_text
+            if has_text:
+                log.info('Read text/plain [' + charset + ']')
+                log.debug(text)
+        elif ptype[1] == 'html':
             has_text = False
             text = html_parse.parse(text)
             has_text = True
+            log.info('Read text/html [' + charset + ']:\r\n')
+            log.debug(text)
     return has_text, text
 
 def read_subject(message):
